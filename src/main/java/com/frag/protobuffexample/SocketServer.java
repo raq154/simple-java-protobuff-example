@@ -8,30 +8,38 @@ import java.rmi.UnknownHostException;
 import static com.frag.protobuffexample.Config.*;
 
 /**
- * Created by raheel on 11/9/2014.
+ * Created by raheel
+ * 11/9/2014.
  */
 public class SocketServer {
 
     public static void main(String[] args) throws IOException {
+
+        ServerSocket echoServer;
+        Socket socket;
+
+        echoServer = new ServerSocket(portNumber);
+        socket = echoServer.accept();
+
         try {
-            receiveMessage();
+            receiveMessage(socket);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    private static void receiveMessage() throws IOException {
-        ServerSocket echoServer = null;
-        String line;
-        DataInputStream is;
-        Socket clientSocket = null;
+    private static void receiveMessage(Socket socket) throws IOException {
 
-        echoServer = new ServerSocket(portNumber);
-        clientSocket = echoServer.accept();
-        is = new DataInputStream(clientSocket.getInputStream());
-        AddressBookProtos.AddressBook catFromFile = AddressBookProtos.AddressBook.parseFrom(is);
-        System.out.println(catFromFile);
+        DataInputStream is = new DataInputStream(socket.getInputStream());
+        DTOs.Request catFromFile = DTOs.Request.parseFrom(is);
 
+        switch (catFromFile.getMsgCase()) {
+            case M1:
+                System.out.println(catFromFile);
+                break;
+            default:
+                System.out.println("unable to get m1 message");
 
+        }
     }
 }
