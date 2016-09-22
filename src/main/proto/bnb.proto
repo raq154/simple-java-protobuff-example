@@ -1,0 +1,201 @@
+
+option java_package = "com.frag.protobuffexample";
+
+option java_outer_classname = "DTOs";
+
+enum Condition {
+    NONE = 0;
+    ENEMY_HEALTH_LESS_THAN_10 = 1;
+    ENEMY_OF_TYPE_CASTER = 2;
+}
+
+enum State {
+    DORMANT = 0;
+    ACTIVE = 1;
+}
+
+enum Summoner {
+    BOARD_CARD = 0;
+    HAND_CARD = 1;
+    HERO_ABILITY = 3;
+}
+
+enum StoreType {
+    GOLD_STORE = 0;
+    MONEY_STORE = 1;
+}
+
+enum SocialMediaPlateform {
+    FACEBOOK = 0;
+    TWITTER = 1;
+}
+
+//DTOs
+message Card {
+    required string damage = 1;
+    required Condition condition = 2;
+    required int32 cost = 3;
+    required State state = 4;
+}
+
+
+message Player {
+    required string id = 1;
+    required int32 health = 2;
+    required string selectedHero = 3;
+    repeated Card availableCards = 4;
+    repeated Card hand = 5;
+}
+
+message Hero {
+    required string heroId = 1;
+    repeated Card card = 2;
+}
+
+message Leaderboard {
+}
+
+message MetaData {
+    required string metadata = 1; //can be replaced by metadata class fields
+}
+
+
+//Request Response Messages
+message Request {
+    required string requestId = 1;
+    oneof msg { SelectHeroRequest m1 = 2; PurchaseHeroRequest m2 = 3; DrawCardRequest m3 = 4; }
+}
+
+message Response {
+    required string requestId = 1;
+    required bool success = 2;
+    oneof msg { SelectHeroResponse m1 = 3; PurchaseHeroResponse m2 = 4; }
+}
+
+message RegisterUserRequest {
+    required string userName = 1;
+    required string hashedPassword = 2;
+    required string firstName = 3;
+    required string lastName = 4;
+    required string avatarId = 5;
+}
+
+message RegisterUserResponse {
+}
+
+message LoginUserRequest {
+    required string userName = 1;
+    required string hashedPassword = 2;
+}
+
+message LoginUserResponse {
+}
+
+
+message SelectHeroRequest {
+    repeated string heroId = 1;
+}
+
+message SelectHeroResponse {
+    required string heroId = 1;
+}
+
+message PurchaseHeroRequest {
+    required string heroId = 1;
+}
+
+message PurchaseHeroResponse {
+    required Hero hero = 1;
+}
+
+message StartGameRequest {
+}
+
+message StartGameResponse {
+    repeated Card hand = 1;
+    repeated Player opponents = 2;
+}
+
+message DrawCardRequest {
+}
+
+message DrawCardResponse {
+    required Card card = 1;
+}
+
+message PlayCardRequest {
+    required Card card = 1;
+    optional string targetId = 2;
+}
+
+message PlayCardResponse {
+    required Card card = 1;
+}
+
+message SummonMinnion {
+    required Summoner summoner = 1;
+    optional string summonerId = 2;
+}
+
+message ScrapCardRequest {
+    required Card card = 1;
+}
+
+message ScrapCardResponse {
+    required Card card = 1;
+}
+
+message BuyPackOfCardRequest {
+    required string itemId = 1;
+    required StoreType storeType = 2;
+}
+
+message BuyPackOfCardResponse {
+}
+
+message BuyHeroRequest {
+    required string heroId = 1;
+    required StoreType storeType = 2;
+}
+
+message BuyHeroResponse {
+}
+
+message FetchFriendsFromSMRequest {
+    required SocialMediaPlateform plateform = 1;
+}
+
+message FetchFriendsFromSMResponse {
+    repeated Player friends = 1;
+}
+
+message FetchFriendsRequest {
+}
+
+message FetchFriendsResponse {
+    repeated Player friends = 1;
+}
+
+message AddFriendRequest {
+    required string playerId = 1;
+}
+
+message AddFriendResponse {
+}
+
+message FetchLeaderboardsRequest {
+}
+
+message FetchLeaderboardsResponse {
+    required Leaderboard leaderboard = 1;
+}
+
+message FetchMetaDataRequest {
+}
+
+message FetchMetaDataResponse {
+    required MetaData metadata = 1;
+}
+
+message Ping {
+}
